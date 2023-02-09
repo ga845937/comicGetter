@@ -1,0 +1,13 @@
+{
+    "httpPort": 3000,
+    "rootDir": "./comic",
+    "ttlMinute": 10,
+    "cartoonmadConfig": {
+        "refererUrl": "https://www.cartoonmad.com/comic/",
+        "baseUrl": "https://www.cartoonmad.cc/",
+        "page_baseUrl": "https://www.cartoonmad.cc/comic/"
+    },
+    "dm5Config": {
+        "baseUrl": "https://www.dm5.cn"
+    }
+}
