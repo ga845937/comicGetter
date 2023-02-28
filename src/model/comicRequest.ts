@@ -6,6 +6,8 @@ export type Task = Cartoonmad | Dm5;
 export interface ComicRequest {
     comicWeb: "cartoonmad" | "dm5",
     comicUrl: string,
+    memo?: string,
+    downloadEnd: boolean
 }
 
 export interface DownloadRequest {

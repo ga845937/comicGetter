@@ -1,4 +1,4 @@
-import { IChData, IDm5 } from "../model/dm5";
+import { IChData, IDm5, IDownloadInfo } from "../model/dm5";
 import { streamDownloadFile, errorHandle } from "./utils";
 import config from "../config.json";
 
@@ -8,7 +8,6 @@ import { mkdirSync } from "fs";
 import { join } from "path";
 
 export class Dm5 {
-    alive = true;
     socket: Socket;
     unixTimestamp: number;
     ttl: number;
@@ -163,14 +162,15 @@ export class Dm5 {
                         dm5.downloadEndIndx.push(i);
                     }
 
-                    const downloadInfoRes = {
+                    const downloadInfoRes: IDownloadInfo = {
                         unixTimestamp: this.unixTimestamp,
                         bname: dm5.bname,
                         chioceChapterIndex: chData.chioceChapterIndex,
                         chapterName: chData.chapterName,
                         imgLength: chData.imgLength,
                         downloadLength: chData.downloadLength,
-                        downloadChEnd: downloadChEnd
+                        downloadChEnd: downloadChEnd,
+                        compeleteTask: dm5.downloadEndIndx.length === dm5.chData.length
                     };
                     socket.emit("downloadEnd", downloadInfoRes);
                 }
@@ -198,15 +198,6 @@ export class Dm5 {
         catch (err) {
             errorHandle(this, err);
         }
-    }
-
-    async checkEnd() {
-        const dm5 = this.data;
-        if (!this.alive) {
-            console.log("掛掉");
-            return false;
-        }
-        return dm5.downloadEndIndx.length === dm5.chData.length;
     }
 }
 

@@ -1,7 +1,7 @@
-const websocket = io();
+const websocket = io("/", { path: "/comicGetter" });
 let ttlList = {}
 
-function sned() {
+function send() {
     const comicWeb = $("#comicWeb").val();
     const comicUrl = $("#comicUrl").val();
 
@@ -54,9 +54,11 @@ websocket.on("status", function (status) {
 websocket.on("downloadEnd", function (chData) {
     console.log(chData)
     if (chData.downloadChEnd) {
-        clearInterval(ttlList[chData.unixTimestamp]);
-        websocket.emit('deleteTask', chData.unixTimestamp);
         console.log(`${chData.bname} - ${chData.chapterName} 下載完成`)
+    }
+    if (chData.compeleteTask) {
+        clearUpdateTTL(chData.unixTimestamp)
+        websocket.emit('deleteTask', chData.unixTimestamp);
     }
 })
 
@@ -83,5 +85,11 @@ websocket.on("sendBatch", function () {
 
 websocket.on("errorHandle", function (err) {
     console.error(err);
+    clearUpdateTTL(err.unixTimestamp);
     websocket.emit('deleteTask', err.unixTimestamp);
 })
+
+function clearUpdateTTL(unixTimestamp) {
+    clearInterval(ttlList[unixTimestamp]);
+    delete ttlList[unixTimestamp]
+}

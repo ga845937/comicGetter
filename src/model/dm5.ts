@@ -20,3 +20,14 @@ export interface IDm5 {
     chData?: IChData[],
     downloadEndIndx: number[]
 }
+
+export interface IDownloadInfo {
+    unixTimestamp: number,
+    bname: string,
+    chapterName: string,
+    chioceChapterIndex: number,
+    imgLength: number,
+    downloadLength: number,
+    downloadChEnd: boolean,
+    compeleteTask: boolean
+}

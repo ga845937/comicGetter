@@ -1,4 +1,4 @@
-import { IChData, ICartoonmad } from "../model/cartoonmad";
+import { IChData, ICartoonmad, IDownloadInfo } from "../model/cartoonmad";
 import { streamDownloadFile, errorHandle } from "./utils";
 import config from "../config.json";
 
@@ -12,7 +12,6 @@ const headers = {
 };
 
 export class Cartoonmad {
-    alive = true;
     socket: Socket;
     unixTimestamp: number;
     ttl: number;
@@ -136,14 +135,15 @@ export class Cartoonmad {
                         cartoonmadData.downloadEndIndx.push(i);
                     }
 
-                    const downloadInfoRes = {
+                    const downloadInfoRes: IDownloadInfo = {
                         unixTimestamp: this.unixTimestamp,
                         bname: cartoonmadData.bname,
                         chioceChapterIndex: chData.chioceChapterIndex,
                         chapterName: chData.chapterName,
                         imgLength: chData.imgLength,
                         downloadLength: chData.downloadLength,
-                        downloadChEnd: downloadChEnd
+                        downloadChEnd: downloadChEnd,
+                        compeleteTask: cartoonmadData.downloadEndIndx.length === cartoonmadData.chData.length
                     };
                     socket.emit("downloadEnd", downloadInfoRes);
                 }
@@ -171,14 +171,6 @@ export class Cartoonmad {
         catch (err) {
             errorHandle(this, err);
         }
-    }
-
-    async checkEnd() {
-        const cartoonmadData = this.data;
-        if (!this.alive) {
-            return false;
-        }
-        return cartoonmadData.downloadEndIndx.length === cartoonmadData.chData.length;
     }
 }
 

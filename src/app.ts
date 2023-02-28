@@ -9,7 +9,7 @@ import { indexWS } from "./ws/indexWS";
 
 const app = express();
 const httpServer = createServer(app);
-indexWS(new socketServer(httpServer));
+indexWS(new socketServer(httpServer, { path: "/comicGetter" }));
 
 app.set("views", join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -19,6 +19,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use("/comicGetterPublic", express.static(join(__dirname, "public")));
 
-app.use("/", indexRouter.router);
+app.use("/comicGetter", indexRouter.router);
 
 httpServer.listen(httpPort);
